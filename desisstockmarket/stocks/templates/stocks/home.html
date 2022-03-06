@@ -1,0 +1,13 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h1> Stocks Page </h1>
+<div>
+    {% for stock in stocks %}
+        <div>
+            <h3> {{stock.id}} --- <a href='{% url 'info' stock.id %}'>{{stock.name}}</a> </h3>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
