@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h1> Info Page for individual stocks </h1>
+<div>
+    <h1> {{stock.stockId}} - {{stock.stockName}} </h1>
+    <h4> Comapany Name:  {{stock.fullCompanyName}} </h4>
+    <h4> Share Price:  {{stock.currentSharePrice}} </h4>
+    <h4> sharesOutstanding:  {{stock.sharesOutstanding}} </h4>
+</div>
+
+{% endblock %}

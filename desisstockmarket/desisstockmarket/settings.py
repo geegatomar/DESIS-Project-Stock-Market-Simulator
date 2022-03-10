@@ -38,10 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Make sure to add all additional apps here
     'base',
     'stocks',
     'orders',
     'trades',
+
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,21 @@
+<h1> Stock Market Simulator Name Here (TODO) </h1>
+
+{% if request.user.is_authenticated %}
+<span style="display:inline-block; width: 8%;">
+    <a href="{% url 'base:logout' %}"> Logout </a>
+</span>
+
+<span style="display:inline-block; width: 8%;">
+    <a href="{% url 'orders:home' %}"> My Orders </a>
+</span>
+
+{% else %}
+<span style="display:inline-block; width: 8%;">
+    <a href="{% url 'base:login' %}"> Login </a>
+</span>
+
+{% endif %}
+
+<span style="display:inline-block; width: 8%;">
+    <a href="{% url 'stocks:home' %}"> Stocks </a>
+</span>

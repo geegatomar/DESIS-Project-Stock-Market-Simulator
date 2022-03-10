@@ -1,19 +1,22 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from stocks.models import Stock
+
 # Create your views here.
 
-stocks = [
-    {'id': 1, 'name': 'GOOGL'},
-    {'id': 2, 'name': 'MCRSFT'},
-    {'id': 3, 'name': 'ADOBE'},
-]
+# Home page of stocks displays list of all stocks that are available and can be traded
+# on our platform.
 
 
 def home(request):
+    stocks = Stock.objects.all()
     context = {'stocks': stocks}
     return render(request, 'stocks/home.html', context)
 
+# Info about each individual stock
+
 
 def info(request, id):
-    # TODO: Typically later we will be picking out the entry from the database.
-    return HttpResponse(id)
+    stock = Stock.objects.get(stockId=id)
+    context = {'stock': stock}
+    return render(request, 'stocks/info.html', context)
