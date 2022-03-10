@@ -48,6 +48,12 @@ def registerUser(request):
     context = {'page': page, 'form': form}
     return render(request, 'base/login_register.html', context)
 
+# We mostly don't need this
+# def userProfile(request, pk):
+#     user = User.objects.get(id=pk)
+#     context = {'user': user}
+#     return render(request, 'base/profile.html', context)
+
 
 def home(request):
     return render(request, 'home.html')
