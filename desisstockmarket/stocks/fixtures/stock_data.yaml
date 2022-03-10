@@ -4,7 +4,7 @@
     stockId: "01"
     stockName: "GOOGL"
     fullCompanyName: "Google Alphabet Inc."
-    currentSharePrice: 1000.000
+    currentSharePrice: 2000.000
     sharesOutstanding: 1000
     lastTradedAt: "2002-02-02"
 - model: stocks.Stock

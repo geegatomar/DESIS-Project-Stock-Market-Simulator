@@ -1,8 +1,11 @@
 from django.db import models
 from enum import Enum
 from stocks.models import Stock
-from django.contrib.auth.models import User
-
+#from base.models import User
+#from desisstockmarket import settings
+from django.conf import settings
+from django.contrib.auth import get_user_model
+User = get_user_model()
 # Create your models here.
 # Specifying the order types as enum since we can only create orders of these specific types.
 
@@ -55,7 +58,8 @@ class Order(models.Model):
     # TODO: Add the createdByUser field after users are created
     createdAt = models.DateField(auto_now_add=True)
     updatedAt = models.DateField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE,)
 
     # We are sorting the list to display by the latest createdAt value first
     class Meta:

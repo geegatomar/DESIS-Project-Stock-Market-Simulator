@@ -19,3 +19,7 @@
 <span style="display:inline-block; width: 8%;">
     <a href="{% url 'stocks:home' %}"> Stocks </a>
 </span>
+
+{% if request.user.is_authenticated %}
+<span> Account Value: {{ request.user.account_value }} </span>
+{% endif %}

@@ -1,11 +1,13 @@
+from email import message
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.db.models import Q
-from .models import Order
+from .models import Order, OrderDirections
 from .forms import OrderForm
 from stocks.models import Stock
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from django.contrib import messages
 # Create your views here.
 
 # Home page of stocks displays list of all stocks that are available and can be traded
@@ -39,6 +41,51 @@ def home(request):
 #     context = {'stock': stock}
 #     return render(request, 'stocks/info.html', context)
 
+def isValidTransaction(order):
+    # TODO: Add condition for selling later
+    if order.orderDirection == OrderDirections.SELL:
+        return True, ""
+    # You cannot buy more than the outstanding number of shares
+    if order.quantity > order.stock.sharesOutstanding:
+        return False, 'You cannot buy more than the outstanding number of shares'
+    share_price = order.stock.currentSharePrice
+    account_value = order.user.account_value
+    print(share_price)
+    print(order.quantity)
+    print(account_value)
+    if share_price * order.quantity > account_value:
+        return False, 'Insufficient balance to buy stock'
+    return True, ""
+
+
+@login_required(login_url='base:login')
+def createOrderWithInitialData(request, pk, direction):
+    stock = Stock.objects.get(stockId=pk)
+
+    initial_dict = {
+        'stock': stock,
+        'orderDirection': direction,
+    }
+    form = OrderForm(initial=initial_dict)
+    if request.method == "POST":
+        print(request.POST)
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            # If the data received via the form is valid, we save it to the DB
+            order = form.save(commit=False)
+            order.user = request.user
+            # TODO: Probably later also add a check that you cannot sell stocks that you don't own yet
+            isvalid, err = isValidTransaction(order)
+            if isvalid:
+                order.save()
+                # After form has been saved, we just redirect back to home page
+                return redirect('orders:home')
+            else:
+                messages.error(request, err)
+    context = {"form": form}
+    return render(request, 'orders/order_form.html', context)
+
+
 @login_required(login_url='base:login')
 def createOrder(request):
     form = OrderForm()
@@ -51,9 +98,14 @@ def createOrder(request):
             # If the data received via the form is valid, we save it to the DB
             order = form.save(commit=False)
             order.user = request.user
-            order.save()
-            # After form has been saved, we just redirect back to home page
-            return redirect('orders:home')
+            # TODO: Probably later also add a check that you cannot sell stocks that you don't own yet
+            isvalid, err = isValidTransaction(order)
+            if isvalid:
+                order.save()
+                # After form has been saved, we just redirect back to home page
+                return redirect('orders:home')
+            else:
+                messages.error(request, err)
 
     context = {"form": form}
     return render(request, 'orders/order_form.html', context)

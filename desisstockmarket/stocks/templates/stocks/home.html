@@ -5,7 +5,13 @@
 <div>
     {% for stock in stocks %}
         <div>
-            <h3> {{stock.stockId}} --- <a href='{% url 'stocks:info' stock.stockId %}'>{{stock.stockName}}</a> </h3>
+            <h3> {{stock.stockId}} --- <a href='{% url 'stocks:info' stock.stockId %}'>{{stock.stockName}}</a> -- Price: {{stock.currentSharePrice}} -- Shares Outstanding: {{stock.sharesOutstanding}} </h3>
+            
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'orders:create-order-initialized' stock.stockId 'BUY' %}"> Buy </a>
+            <a href="{% url 'orders:create-order-initialized' stock.stockId 'SELL' %}"> Sell </a>
+            {% endif %}
+            <hr>
         </div>
     {% endfor %}
 </div>
