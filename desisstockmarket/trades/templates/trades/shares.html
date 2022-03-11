@@ -1,0 +1,14 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h1> Quantity of Stocks Owned Page </h1>
+<div>
+    {% for key, val in quantity_stocks_owned.items %}
+        <div>
+            <h3> {{key}}  : {{val}} </h3>
+            <hr>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

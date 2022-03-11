@@ -1,0 +1,14 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h1> Trades Page </h1>
+<div>
+    {% for trade in trades %}
+        <div>
+            <h3> {{trade.order}} --- executed at price --- {{trade.executionPrice}} </h3>
+            <hr>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

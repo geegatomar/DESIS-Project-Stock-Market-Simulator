@@ -12,7 +12,7 @@ User = get_user_model()
 
 class OrderTypes(Enum):
     MARKET = "MARKET"
-    LIMIT = "SELL"
+    LIMIT = "LIMIT"
 
     @classmethod
     def choices(cls):
@@ -36,6 +36,7 @@ class OrderStatus(Enum):
     def choices(cls):
         return [(key.value, key.name) for key in cls]
 
+
 # Creating the order table which has a one-to-many relationship with stocks, i.e. many orders can
 # correspond to one stock.
 
@@ -50,10 +51,11 @@ class Order(models.Model):
                                    choices=OrderStatus.choices(), default=OrderStatus.PENDING)
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
-    # stockName = models.CharField(max_length=128, unique=True)
-    # fullCompanyName = models.CharField(max_length=128)
-    # currentSharePrice = models.DecimalField(max_digits=16, decimal_places=3)
-    # sharesOutstanding = models.IntegerField()
+    # The dynamicQuantity field is used for the execution of orders
+    dynamicQuantity = models.IntegerField(default=1)
+    # TODO: Dont display limit price to user if they select 'market' orders
+    limitPrice = models.DecimalField(
+        max_digits=16, decimal_places=3, blank=True)
 
     # TODO: Add the createdByUser field after users are created
     createdAt = models.DateField(auto_now_add=True)
@@ -67,4 +69,10 @@ class Order(models.Model):
 
     # Note that type 1 is for Market orders, and 2 for limit orders (from enums we defined above)
     def __str__(self):
-        return str(self.orderType) + " order to " + str(self.orderDirection) + " " + str(self.quantity) + " " + str(self.stock) + " stock"
+        price = str(" at Limit " + str(self.limitPrice) if self.orderType ==
+                    'LIMIT' else "")
+        # orderStatus = ("PENDING" if self.orderStatus ==
+        #                'OrderStatus.PENDING' else "EXECUTED")
+        orderStatus = ('EXECUTED' if self.orderStatus in (
+            'OrderStatus.EXECUTED', 'EXECUTED', OrderStatus.EXECUTED) else 'PENDING')
+        return str(self.orderType) + " order to " + str(self.orderDirection) + " " + str(self.quantity) + " " + str(self.stock) + " stock" + price + ": " + orderStatus

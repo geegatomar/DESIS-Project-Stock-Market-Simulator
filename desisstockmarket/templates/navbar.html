@@ -9,6 +9,15 @@
     <a href="{% url 'orders:home' %}"> Orders </a>
 </span>
 
+<span style="display:inline-block; width: 8%;">
+    <a href="{% url 'trades:view-trades' %}"> Trades </a>
+</span>
+
+<span style="display:inline-block; width: 8%;">
+    <a href="{% url 'trades:view-shares' %}"> Shares </a>
+</span>
+
+
 {% else %}
 <span style="display:inline-block; width: 8%;">
     <a href="{% url 'base:login' %}"> Login </a>
