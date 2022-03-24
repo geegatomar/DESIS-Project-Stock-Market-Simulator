@@ -8,15 +8,15 @@
 4. Check the Makefile for common commands, and you can directly execute them also.
 5. Also make sure to do the 'makemigrations' and 'migrate' in django.
 
-TODO: Add more to this
+- TODO: Add more to this
 
 ### Project Explanation
-TODO: Add explanation
-TODO: Add database diagrams, and all other workflow diagrams here
-TODO: Explain all the functionalities, and additional functionalities such as the rate limiter we added
-TODO: Explain our main order matching algorithm, and why we took 4 queues
+- TODO: Add explanation
+- TODO: Add database diagrams, and all other workflow diagrams here
+- TODO: Explain all the functionalities, and additional functionalities such as the rate limiter we added
+- TODO: Explain our main order matching algorithm, and why we took 4 queues
 
-TODO: Also add a future work and caveats section
+- TODO: Also add a future work and caveats section
 
 
 #### Team
