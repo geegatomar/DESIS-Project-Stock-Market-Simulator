@@ -1,15 +1,22 @@
 from email import message
+from pickle import FALSE, TRUE
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.db.models import Q
 from .models import Order, OrderDirections
 from .forms import OrderForm
 from stocks.models import Stock
+from trades.models import Trade, Shares_Owned
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from django.utils import timezone
 from django.contrib import messages
 from orders.executions import execute
 import pprint
+# from django.utils import timezone
+import datetime
+from django.contrib.auth import get_user_model
+User = get_user_model()
 # Create your views here.
 
 # Home page of stocks displays list of all stocks that are available and can be traded
@@ -36,17 +43,52 @@ def home(request):
 
 
 def isValidTransaction(order):
-    # TODO: Add condition for selling later
-    if order.orderDirection == OrderDirections.SELL:
-        return True, ""
+    # TODO - DONE: Add condition for selling later
+    # if order.orderDirection == OrderDirections.SELL:
+    #     return True, ""
+    ''''
+    if order.orderDirection == 'SELL':
+        if Shares_Owned.objects.filter(user=order.user, stock=order.stock).exists():
+            currently_owned = Shares_Owned.objects.filter(user=order.user, stock=order.stock)[0].quantity
+            if(currently_owned < order.quantity):
+                return False, "Insufficient shares to sell! You cannot sell stocks that you don\'t own."
+        else:
+            return False, "Insufficient shares to sell! You cannot sell stocks that you don\'t own."
+    '''
+
+    if order.orderDirection == 'BUY':
+        share_price = order.limitPrice
+        account_value = order.user.account_value
+
+        if share_price * order.quantity > account_value:
+            return False, 'Insufficient balance to buy stock'
+    
+    if order.quantity < 1:      # Add upper limit as well
+        return False, "Invalid Quantity!"
+    
+    if order.limitPrice <= 0:
+        return False, "Invalid Limit Price!"
+    
     # You cannot buy more than the outstanding number of shares
     if order.quantity > order.stock.sharesOutstanding:
         return False, 'You cannot buy more than the outstanding number of shares'
-    share_price = order.stock.currentSharePrice
-    account_value = order.user.account_value
-
-    if share_price * order.quantity > account_value:
-        return False, 'Insufficient balance to buy stock'
+    
+    # Rate Limiter
+    bulk_orders = Order.objects.filter(
+        Q(user=order.user) & Q(stock=order.stock) & Q(orderDirection="BUY"))
+    
+    print(bulk_orders)
+    print()
+    print(bulk_orders.count())
+    if bulk_orders.count() > 5:
+        print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+        print(timezone.now())
+        print(bulk_orders[5].createdAt)
+        print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+        elapsedTime = timezone.now() - bulk_orders[5].createdAt
+        if elapsedTime.total_seconds() < 10*60:
+            return False, 'Rate Limitation! Can\'t make more than 5 orders in 10 minutes.'
+    
     return True, ""
 
 # TODO: Not sure how we will support Edit and Delete order functionality now... need to probably remove it
@@ -122,9 +164,11 @@ def createOrderWithInitialData(request, pk, direction):
             order = form.save(commit=False)
             order.user = request.user
             order.dynamicQuantity = order.quantity
-            if order.limitPrice is None:
+            order.quantityExecuted = 0
+            if order.orderType == "MARKET" or order.limitPrice is None:
                 order.limitPrice = order.stock.currentSharePrice
-            # TODO: Probably later also add a check that you cannot sell stocks that you don't own yet
+            
+            # TODO - DONE: Probably later also add a check that you cannot sell stocks that you don't own yet
             isvalid, err = isValidTransaction(order)
             if isvalid:
                 order.save()
@@ -150,9 +194,11 @@ def createOrder(request):
             order = form.save(commit=False)
             order.user = request.user
             order.dynamicQuantity = order.quantity
-            if order.limitPrice is None:
+            order.quantityExecuted = 0
+            if order.orderType == "MARKET" or order.limitPrice is None:
                 order.limitPrice = order.stock.currentSharePrice
-            # TODO: Probably later also add a check that you cannot sell stocks that you don't own yet
+            # TODO - DONE: Probably later also add a check that you cannot sell stocks that you don't own yet
+            
             isvalid, err = isValidTransaction(order)
             if isvalid:
                 order.save()
@@ -168,7 +214,8 @@ def createOrder(request):
 # TODO: Not sure how we will support Edit and Delete order functionality now... need to probably remove it
 # TODO: I think we should remove the edit and delete functionality for orders completely...
 
-
+# Removing this functionality
+'''
 @login_required(login_url='base:login')
 def updateOrder(request, pk):
     order = Order.objects.get(id=pk)
@@ -178,15 +225,27 @@ def updateOrder(request, pk):
         form = OrderForm(request.POST, instance=order)
         if form.is_valid():
             order = form.save(commit=False)
-            order.updatedAt = datetime.now()
+            #order.updatedAt = datetime.now()
+            #order.updatedAt = timezone.now()
+            order.updatedAt = datetime.datetime.now()
             order.dynamicQuantity = order.quantity
-            if order.limitPrice is None:
+            order.quantityExecuted = 0
+            if order.orderType == "MARKET" or order.limitPrice is None:
                 order.limitPrice = order.stock.currentSharePrice
-            # order.save(update_fields=['updatedAt'])
-            order.save()
-            # TODO: The sorting of orders isn't working correctly. If I update an order
+            
+            # TODO - DONE: The sorting of orders isn't working correctly. If I update an order
             # then it should come on the top of the list, which isnt happening currently.
-            return redirect('orders:home')
+
+            # order.save(update_fields=['updatedAt'])
+            # order.save()
+            # return redirect('orders:home')
+
+            isvalid, err = isValidTransaction(order)
+            if isvalid:
+                order.save()
+                return redirect('orders:home')
+            else:
+                messages.error(request, err)
 
     context = {'form': form}
     return render(request, 'orders/order_form.html', context)
@@ -203,3 +262,4 @@ def deleteOrder(request, pk):
 
     context = {'obj': order}
     return render(request, 'orders/delete.html', context)
+'''

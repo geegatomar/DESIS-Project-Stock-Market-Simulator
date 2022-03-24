@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from orders.models import OrderDirections
-from trades.models import Trade
+from trades.models import Trade, Shares_Owned
 from django.contrib.auth.decorators import login_required
 from stocks.models import Stock
 
@@ -15,6 +15,7 @@ def viewTrades(request):
 
 @login_required(login_url='base:login')
 def viewUserShares(request):
+    '''
     stocks = Stock.objects.all()
     quantity_stocks_owned = {}
     for stock in stocks:
@@ -25,5 +26,25 @@ def viewUserShares(request):
             quantity_stocks_owned[trade.order.stock.stockName] += trade.order.quantity
         else:
             quantity_stocks_owned[trade.order.stock.stockName] -= trade.order.quantity
-    context = {'quantity_stocks_owned': quantity_stocks_owned}
+    '''
+    stocks_owned = {}
+    stocks = Stock.objects.all()
+    for stock in stocks:
+        stocks_owned[stock.stockName] = []
+    shares_owned = Shares_Owned.objects.filter(user=request.user)
+    for shares in shares_owned:
+        details = []
+        #quantity
+        details.append(shares.quantity)
+        #Total invested                             
+        details.append(shares.quantity*shares.avg_cost_price)
+        #total gains       
+        details.append((shares.stock.currentSharePrice - shares.avg_cost_price)*shares.quantity)
+        #profit %age       
+        details.append((shares.stock.currentSharePrice - shares.avg_cost_price)*100/shares.avg_cost_price)       
+        
+        stocks_owned[shares.stock.stockName] = details
+        print("$$$$$$$$$$$$$$ PRINTING $$$$$$$$$$$")
+        print(stocks_owned[shares.stock.stockName])
+    context = {'stocks_owned': stocks_owned}
     return render(request, 'trades/shares.html', context)

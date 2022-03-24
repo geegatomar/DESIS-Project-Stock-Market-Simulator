@@ -6,6 +6,9 @@
     {% for trade in trades %}
         <div>
             <h3> {{trade.order}} --- executed at price --- {{trade.executionPrice}} </h3>
+            {% if trade.order.orderDirection == "SELL" %}
+            <p><i> Profit: {{trade.profit}}% </i> </p>
+            {% endif %}
             <hr>
         </div>
     {% endfor %}

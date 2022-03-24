@@ -1,11 +1,20 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<h1> Quantity of Stocks Owned Page </h1>
+<h1> Details of Stocks Owned </h1>
 <div>
-    {% for key, val in quantity_stocks_owned.items %}
+    {% for key, val in stocks_owned.items %}
         <div>
-            <h3> {{key}}  : {{val}} </h3>
+            {% if val %}
+            <h3> {{key}}  : {{val.0}} </h3>
+            <p>Total investment: Rs. {{val.1}}</p>
+            <p>Current Gains: Rs. {{val.2}}</p>
+            <p>Profit: {{val.3}} % </p>
+
+            {% else %}
+            <h3> {{key}}  : 0 </h3>
+
+            {% endif %}
             <hr>
         </div>
     {% endfor %}

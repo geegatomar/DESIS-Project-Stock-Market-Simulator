@@ -5,6 +5,8 @@ from stocks.models import Stock
 #from desisstockmarket import settings
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.utils import timezone
+import datetime
 User = get_user_model()
 # Create your models here.
 # Specifying the order types as enum since we can only create orders of these specific types.
@@ -31,6 +33,7 @@ class OrderDirections(Enum):
 class OrderStatus(Enum):
     PENDING = "PENDING"
     EXECUTED = "EXECUTED"
+    PARTIAL = "PARTIAL"
 
     @classmethod
     def choices(cls):
@@ -53,13 +56,17 @@ class Order(models.Model):
     quantity = models.IntegerField(default=1)
     # The dynamicQuantity field is used for the execution of orders
     dynamicQuantity = models.IntegerField(default=1)
+    quantityExecuted = models.IntegerField(default=0)
     # TODO: Dont display limit price to user if they select 'market' orders
     limitPrice = models.DecimalField(
         max_digits=16, decimal_places=3, blank=True)
 
     # TODO: Add the createdByUser field after users are created
-    createdAt = models.DateField(auto_now_add=True)
-    updatedAt = models.DateField(auto_now=True)
+    #createdAt = models.DateField(auto_now_add=True)
+    #updatedAt = models.DateField(auto_now=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE,)
 
@@ -73,6 +80,11 @@ class Order(models.Model):
                     'LIMIT' else "")
         # orderStatus = ("PENDING" if self.orderStatus ==
         #                'OrderStatus.PENDING' else "EXECUTED")
+        # orderStatus = ('EXECUTED' if self.orderStatus in (
+        #     'OrderStatus.EXECUTED', 'EXECUTED', OrderStatus.EXECUTED) else 'PENDING')
         orderStatus = ('EXECUTED' if self.orderStatus in (
-            'OrderStatus.EXECUTED', 'EXECUTED', OrderStatus.EXECUTED) else 'PENDING')
+            'OrderStatus.EXECUTED', 'EXECUTED', OrderStatus.EXECUTED) 
+            else 'PENDING' if self.orderStatus in (
+            'OrderStatus.PENDING', 'PENDING', OrderStatus.PENDING)
+            else 'PARTIAL')
         return str(self.orderType) + " order to " + str(self.orderDirection) + " " + str(self.quantity) + " " + str(self.stock) + " stock" + price + ": " + orderStatus
