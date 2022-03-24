@@ -19,14 +19,14 @@
 - TODO: Also add a future work and caveats section
 
 
-#### Team
-##### Members:
-Shivangi Tomar
-Jyotsana Srivastava                                                             
-Radhika Gupta
-Mansi Agarwal
-Anshika Yadav
+### Team
+#### Members:
+- Shivangi Tomar
+- Jyotsana Srivastava                                                             
+- Radhika Gupta
+- Mansi Agarwal
+- Anshika Yadav
 
-##### Mentors:
-Ashutosh Bang
-Pratyush Kamal Chaudhary
+#### Mentors:
+- Ashutosh Bang
+- Pratyush Kamal Chaudhary
