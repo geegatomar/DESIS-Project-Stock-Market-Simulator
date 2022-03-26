@@ -3,6 +3,7 @@ from orders.models import Order, OrderDirections, OrderStatus
 from trades.models import Shares_Owned
 from pprint import pprint
 from trades.transaction import trade
+from orders.executions import bot_services
 import time
 import threading
 from django.utils import timezone
@@ -59,6 +60,24 @@ def removeExecutedOrders(orders):
             print("\n\nITS AN EXECUTED ORDER. REMOVING IT\n\n ")
     return updatedPendingOrder
 
+def updateUserBalance(order, price):
+    # Also reduce or increase the account balance for the particular user
+    current_account_value = order.user.account_value
+
+    print("order.quantity = ", order.quantity)
+    print("order.dynamicQuantity = ", order.dynamicQuantity)
+    print("order.quantityExecuted = ", order.quantityExecuted)
+
+    if order.orderDirection == 'BUY':
+        User.objects.filter(id=order.user.id).update(
+            account_value=current_account_value - price * (order.quantity - order.dynamicQuantity - order.quantityExecuted))
+        #order.user.account_value -= price
+        #Order.objects.filter(id=order.id).update(quantityExecuted=order.quantity - order.dynamicQuantity)
+    else:
+        User.objects.filter(id=order.user.id).update(
+            account_value=current_account_value + price * (order.quantity - order.dynamicQuantity - order.quantityExecuted))
+        #order.user.account_value += price
+        #Order.objects.filter(id=order.id).update(quantityExecuted=order.quantity - order.dynamicQuantity)
 
 def sendExecutedOrdersToTrades(executed_orders_and_price):
     for execution in executed_orders_and_price:
@@ -67,19 +86,6 @@ def sendExecutedOrdersToTrades(executed_orders_and_price):
         order = execution[0]
         price = execution[1]
         trade.addNewTrade(order, price)
-        # Also reduce or increase the account balance for the particular user
-        current_account_value = order.user.account_value
-
-        if order.orderDirection == 'BUY':
-            User.objects.filter(id=order.user.id).update(
-                account_value=current_account_value - price * (order.quantity - order.dynamicQuantity - order.quantityExecuted))
-            #order.user.account_value -= price
-            #Order.objects.filter(id=order.id).update(quantityExecuted=order.quantity - order.dynamicQuantity)
-        else:
-            User.objects.filter(id=order.user.id).update(
-                account_value=current_account_value + price * (order.quantity - order.dynamicQuantity - order.quantityExecuted))
-            #order.user.account_value += price
-            #Order.objects.filter(id=order.id).update(quantityExecuted=order.quantity - order.dynamicQuantity)
 
 # TODO - DONE: Make sure to add check that transaction shall not be withing same user
 
@@ -112,18 +118,18 @@ def updateSharesOwnedForSellOrder(order):
         Shares_Owned.objects.filter(user=order.user, stock=order.stock).update(
                     quantity=(current_quantity - sold_quantity))
     
-    print("Sucessfully executed <<< updateSharesOwnedForSellOrder() >>>")
+    # print("Sucessfully executed <<< updateSharesOwnedForSellOrder() >>>")
 
 def isValidTransaction(order):
-    ''''
+    #''''
     if order.orderDirection == 'SELL':
         if Shares_Owned.objects.filter(user=order.user, stock=order.stock).exists():
             currently_owned = Shares_Owned.objects.filter(user=order.user, stock=order.stock)[0].quantity
             if(currently_owned < order.quantity):
-                return False, "Insufficient shares to sell! You cannot sell stocks that you don\'t own."
+                return False
         else:
             return False
-    '''
+    #'''
     
     if order.orderDirection == 'BUY':
         share_price = order.limitPrice
@@ -154,11 +160,11 @@ def executeBuyMarketOrders(stock, buy_market_orders, sell_market_orders, sell_li
                 break
         print("++++++++++++================= ")
         print("Stock: ", buy_order.stock.stockName)
-        print("User: ", buy_order.user.USERNAME_FIELD)
-        print("Buy Market - Sell Market")
+        # print("User: ", buy_order.user)
+        # print("Buy Market - Sell Market")
         print("wants_to_buy", wants_to_buy)
-        print("available_to_buy:", available_to_buy)
-        print("index:", index)
+        # print("available_to_buy:", available_to_buy)
+        # print("index:", index)
         # Now execute these orders till ith index, and if there are any partially completed orders
         # then let them remain in pending state. But for others we shall marks them as executed
         if index == -1:
@@ -181,6 +187,7 @@ def executeBuyMarketOrders(stock, buy_market_orders, sell_market_orders, sell_li
 
                 # Update in Shares_Owned
                 updateSharesOwnedForSellOrder(sell_market_orders[j])
+                updateUserBalance(sell_market_orders[j], currentSharePrice)
 
                 executed_orders_and_price.append(
                     (sell_market_orders[j], currentSharePrice))
@@ -196,6 +203,7 @@ def executeBuyMarketOrders(stock, buy_market_orders, sell_market_orders, sell_li
                 
                 # Update in Shares_Owned
                 updateSharesOwnedForSellOrder(sell_market_orders[j])
+                updateUserBalance(sell_market_orders[j], currentSharePrice)
 
                 executed_orders_and_price.append(           # Contains Partially executed as well
                     (sell_market_orders[j], currentSharePrice))
@@ -208,13 +216,14 @@ def executeBuyMarketOrders(stock, buy_market_orders, sell_market_orders, sell_li
         buy_market_orders[i].dynamicQuantity = 0
         # Update in Shares_Owned
         updateSharesOwnedForBuyOrder(buy_market_orders[i], currentSharePrice)
+        updateUserBalance(buy_market_orders[i], currentSharePrice)
         
         executed_orders_and_price.append(
             (buy_market_orders[i], currentSharePrice))
 
         buy_market_orders[i].quantityExecuted = buy_market_orders[i].quantity
 
-        print("executed_orders_and_price: ", executed_orders_and_price)
+        # print("executed_orders_and_price: ", executed_orders_and_price)
         sell_market_orders = removeExecutedOrders(sell_market_orders)
 
     buy_market_orders = removeExecutedOrders(buy_market_orders)
@@ -240,11 +249,11 @@ def executeBuyMarketOrders(stock, buy_market_orders, sell_market_orders, sell_li
         
         print("++++++++++++================= ")
         print("Stock: ", buy_order.stock.stockName)
-        print("User: ", buy_order.user.USERNAME_FIELD)
-        print("Buy Market - Sell Limit")
+        # print("User: ", buy_order.user.USERNAME_FIELD)
+        # # print("Buy Market - Sell Limit")
         print("wants_to_buy", wants_to_buy)
-        print("available_to_buy:", available_to_buy)
-        print("index:", index)
+        # print("available_to_buy:", available_to_buy)
+        # print("index:", index)
         # Now execute these orders till ith index, and if there are any partially completed orders
         # then let them remain in pending state. But for others we shall marks them as executed
         if index == -1:
@@ -270,6 +279,7 @@ def executeBuyMarketOrders(stock, buy_market_orders, sell_market_orders, sell_li
 
                 # Update in Shares_Owned
                 updateSharesOwnedForSellOrder(sell_limit_orders[j])
+                updateUserBalance(sell_limit_orders[j], (currentSharePrice + sell_limit_orders[j].limitPrice)/2)
 
                 executed_orders_and_price.append(
                     (sell_limit_orders[j], (currentSharePrice + sell_limit_orders[j].limitPrice)/2))
@@ -285,6 +295,7 @@ def executeBuyMarketOrders(stock, buy_market_orders, sell_market_orders, sell_li
 
                 # Update in Shares_Owned
                 updateSharesOwnedForSellOrder(sell_limit_orders[j])
+                updateUserBalance(sell_limit_orders[j], (currentSharePrice + sell_limit_orders[j].limitPrice)/2)
                 
                 # MAYBE
                 executed_orders_and_price.append(
@@ -298,11 +309,12 @@ def executeBuyMarketOrders(stock, buy_market_orders, sell_market_orders, sell_li
         
         # Update in Shares_Owned
         updateSharesOwnedForBuyOrder(buy_market_orders[i], new_price)
+        updateUserBalance(buy_market_orders[i], new_price)
 
         executed_orders_and_price.append(
             (buy_market_orders[i], new_price))
         
-        print("executed_orders_and_price: ", executed_orders_and_price)
+        # print("executed_orders_and_price: ", executed_orders_and_price)
         sell_limit_orders = removeExecutedOrders(sell_limit_orders)
 
         # Updating stock price
@@ -349,11 +361,11 @@ def executeBuyLimitOrders(stock, buy_limit_orders, sell_market_orders, sell_limi
                 break
         print("++++++++++++================= ")
         print("Stock: ", buy_order.stock.stockName)
-        print("User: ", buy_order.user.USERNAME_FIELD)
-        print("Buy Limit - Sell Market")
+        # print("User: ", buy_order.user.USERNAME_FIELD)
+        # # print("Buy Limit - Sell Market")
         print("wants_to_buy", wants_to_buy)
-        print("available_to_buy:", available_to_buy)
-        print("index:", index)
+        # print("available_to_buy:", available_to_buy)
+        # print("index:", index)
         # Now execute these orders till ith index, and if there are any partially completed orders
         # then let them remain in pending state. But for others we shall marks them as executed
         if index == -1:
@@ -377,6 +389,7 @@ def executeBuyLimitOrders(stock, buy_limit_orders, sell_market_orders, sell_limi
 
                 # Update in Shares_Owned
                 updateSharesOwnedForSellOrder(sell_market_orders[j])
+                updateUserBalance(sell_market_orders[j], (currentSharePrice + buy_order.limitPrice)/2)
                 
                 executed_orders_and_price.append(
                     (sell_market_orders[j], (currentSharePrice + buy_order.limitPrice)/2))
@@ -394,6 +407,7 @@ def executeBuyLimitOrders(stock, buy_limit_orders, sell_market_orders, sell_limi
 
                 # Update in Shares_Owned
                 updateSharesOwnedForSellOrder(sell_market_orders[j])
+                updateUserBalance(sell_market_orders[j], (currentSharePrice + buy_order.limitPrice)/2)
 
                 # MAYBE
                 executed_orders_and_price.append(
@@ -410,6 +424,7 @@ def executeBuyLimitOrders(stock, buy_limit_orders, sell_market_orders, sell_limi
 
         # Update in Shares_Owned
         updateSharesOwnedForBuyOrder(buy_limit_orders[i], new_price)
+        updateUserBalance(buy_limit_orders[i], new_price)
 
         executed_orders_and_price.append(
             (buy_limit_orders[i], new_price))
@@ -424,7 +439,7 @@ def executeBuyLimitOrders(stock, buy_limit_orders, sell_market_orders, sell_limi
         new_stock_history = StockPriceHistory(stock=stock, stockPrice=new_price, updatedAt=timezone.now())
         new_stock_history.save()
 
-        print("executed_orders_and_price: ", executed_orders_and_price)
+        # print("executed_orders_and_price: ", executed_orders_and_price)
         sell_market_orders = removeExecutedOrders(sell_market_orders)
 
     buy_limit_orders = removeExecutedOrders(buy_limit_orders)
@@ -447,11 +462,11 @@ def executeBuyLimitOrders(stock, buy_limit_orders, sell_market_orders, sell_limi
         
         print("++++++++++++================= ")
         print("Stock: ", buy_order.stock.stockName)
-        print("User: ", buy_order.user.USERNAME_FIELD)
-        print("Buy Limit - Sell Limit")
+        # print("User: ", buy_order.user.USERNAME_FIELD)
+        # # print("Buy Limit - Sell Limit")
         print("wants_to_buy", wants_to_buy)
-        print("available_to_buy:", available_to_buy)
-        print("index:", index)
+        # print("available_to_buy:", available_to_buy)
+        # print("index:", index)
         # Now execute these orders till ith index, and if there are any partially completed orders
         # then let them remain in pending state. But for others we shall marks them as executed
         if index == -1:
@@ -476,6 +491,7 @@ def executeBuyLimitOrders(stock, buy_limit_orders, sell_market_orders, sell_limi
 
                 # Update in Shares_Owned
                 updateSharesOwnedForSellOrder(sell_limit_orders[j])
+                updateUserBalance(sell_limit_orders[j], (buy_order.limitPrice + sell_limit_orders[j].limitPrice)/2)
 
                 executed_orders_and_price.append(
                     (sell_limit_orders[j], (buy_order.limitPrice + sell_limit_orders[j].limitPrice)/2))
@@ -492,6 +508,7 @@ def executeBuyLimitOrders(stock, buy_limit_orders, sell_market_orders, sell_limi
                 
                 # Update in Shares_Owned
                 updateSharesOwnedForSellOrder(sell_limit_orders[j])
+                updateUserBalance(sell_limit_orders[j], (buy_order.limitPrice + sell_limit_orders[j].limitPrice)/2)
 
                 # MAYBE
                 executed_orders_and_price.append(
@@ -508,13 +525,14 @@ def executeBuyLimitOrders(stock, buy_limit_orders, sell_market_orders, sell_limi
 
         # Update in Shares_Owned
         updateSharesOwnedForBuyOrder(buy_limit_orders[i], new_price)
+        updateUserBalance(buy_limit_orders[i], new_price)
 
         executed_orders_and_price.append(
             (buy_limit_orders[i], new_price))
         
         buy_limit_orders[i].quantityExecuted = buy_limit_orders[i].quantity
         
-        print("executed_orders_and_price: ", executed_orders_and_price)
+        # print("executed_orders_and_price: ", executed_orders_and_price)
         sell_limit_orders = removeExecutedOrders(sell_limit_orders)
 
         # Updating stock price
@@ -553,11 +571,11 @@ def executeSellMarketOrders(stock, sell_market_orders, buy_market_orders, buy_li
                 break
         print("++++++++++++================= ")
         print("Stock: ", sell_order.stock.stockName)
-        print("User: ", sell_order.user.USERNAME_FIELD)
-        print("Sell Market - Sell Market")
+        # print("User: ", sell_order.user.USERNAME_FIELD)
+        # # print("Sell Market - Sell Market")
         print("wants_to_sell", wants_to_sell)
-        print("available_to_sell:", available_to_sell)
-        print("index:", index)
+        # print("available_to_sell:", available_to_sell)
+        # print("index:", index)
         # Now execute these orders till ith index, and if there are any partially completed orders
         # then let them remain in pending state. But for others we shall marks them as executed
         if index == -1:
@@ -580,6 +598,7 @@ def executeSellMarketOrders(stock, sell_market_orders, buy_market_orders, buy_li
 
                 # Update in Shares_Owned
                 updateSharesOwnedForBuyOrder(buy_market_orders[j], currentSharePrice)
+                updateUserBalance(buy_market_orders[j], currentSharePrice)
 
                 executed_orders_and_price.append(
                     (buy_market_orders[j], currentSharePrice))
@@ -595,6 +614,7 @@ def executeSellMarketOrders(stock, sell_market_orders, buy_market_orders, buy_li
                 
                 # Update in Shares_Owned
                 updateSharesOwnedForBuyOrder(buy_market_orders[j], currentSharePrice)
+                updateUserBalance(buy_market_orders[j], currentSharePrice)
 
                 executed_orders_and_price.append(
                     (buy_market_orders[j], currentSharePrice))
@@ -608,13 +628,14 @@ def executeSellMarketOrders(stock, sell_market_orders, buy_market_orders, buy_li
 
         # Update in Shares_Owned
         updateSharesOwnedForSellOrder(sell_market_orders[i])
+        updateUserBalance(sell_market_orders[i], currentSharePrice)
 
         executed_orders_and_price.append(
             (sell_market_orders[i], currentSharePrice))
         
         sell_market_orders[i].quantityExecuted = sell_market_orders[i].quantity
         
-        print("executed_orders_and_price: ", executed_orders_and_price)
+        # print("executed_orders_and_price: ", executed_orders_and_price)
         buy_market_orders = removeExecutedOrders(buy_market_orders)
 
     sell_market_orders = removeExecutedOrders(sell_market_orders)
@@ -638,11 +659,11 @@ def executeSellMarketOrders(stock, sell_market_orders, buy_market_orders, buy_li
         
         print("++++++++++++================= ")
         print("Stock: ", sell_order.stock.stockName)
-        print("User: ", sell_order.user.USERNAME_FIELD)
-        print("Sell Market - Buy Limit")
+        # print("User: ", sell_order.user.USERNAME_FIELD)
+        # # print("Sell Market - Buy Limit")
         print("wants_to_sell", wants_to_sell)
-        print("available_to_sell:", available_to_sell)
-        print("index:", index)
+        # print("available_to_sell:", available_to_sell)
+        # print("index:", index)
         # Now execute these orders till ith index, and if there are any partially completed orders
         # then let them remain in pending state. But for others we shall marks them as executed
         if index == -1:
@@ -667,6 +688,7 @@ def executeSellMarketOrders(stock, sell_market_orders, buy_market_orders, buy_li
 
                 # Update in Shares_Owned
                 updateSharesOwnedForBuyOrder(buy_limit_orders[j], (currentSharePrice + buy_limit_orders[j].limitPrice)/2)
+                updateUserBalance(buy_limit_orders[j], (currentSharePrice + buy_limit_orders[j].limitPrice)/2)
 
                 executed_orders_and_price.append(
                     (buy_limit_orders[j], (currentSharePrice + buy_limit_orders[j].limitPrice)/2))
@@ -684,6 +706,7 @@ def executeSellMarketOrders(stock, sell_market_orders, buy_market_orders, buy_li
                 
                 # Update in Shares_Owned
                 updateSharesOwnedForBuyOrder(buy_limit_orders[j], (currentSharePrice + buy_limit_orders[j].limitPrice)/2)
+                updateUserBalance(buy_limit_orders[j], (currentSharePrice + buy_limit_orders[j].limitPrice)/2)
 
                 # MAYBE
                 executed_orders_and_price.append(
@@ -700,13 +723,14 @@ def executeSellMarketOrders(stock, sell_market_orders, buy_market_orders, buy_li
 
         # Update in Shares_Owned
         updateSharesOwnedForSellOrder(sell_market_orders[i])
+        updateUserBalance(sell_market_orders[i], new_price)
 
         executed_orders_and_price.append(
             (sell_market_orders[i], new_price))
         
         sell_market_orders[i].quantityExecuted = sell_market_orders[i].quantity
         
-        print("executed_orders_and_price: ", executed_orders_and_price)
+        # print("executed_orders_and_price: ", executed_orders_and_price)
         buy_limit_orders = removeExecutedOrders(buy_limit_orders)
 
         # Updating stock price
@@ -746,11 +770,11 @@ def executeSellLimitOrders(stock, sell_limit_orders, buy_market_orders, buy_limi
                 break
         print("++++++++++++================= ")
         print("Stock: ", sell_order.stock.stockName)
-        print("User: ", sell_order.user.USERNAME_FIELD)
-        print("Sell Limit - Buy Market")
+        # print("User: ", sell_order.user.USERNAME_FIELD)
+        # # print("Sell Limit - Buy Market")
         print("wants_to_sell", wants_to_sell)
-        print("available_to_sell:", available_to_sell)
-        print("index:", index)
+        # print("available_to_sell:", available_to_sell)
+        # print("index:", index)
         # Now execute these orders till ith index, and if there are any partially completed orders
         # then let them remain in pending state. But for others we shall marks them as executed
         if index == -1:
@@ -774,7 +798,8 @@ def executeSellLimitOrders(stock, sell_limit_orders, buy_market_orders, buy_limi
 
                 # Update in Shares_Owned
                 updateSharesOwnedForBuyOrder(buy_market_orders[j], (currentSharePrice + sell_order.limitPrice)/2)
-
+                updateUserBalance(buy_market_orders[j], (currentSharePrice + sell_order.limitPrice)/2)
+                
                 executed_orders_and_price.append(
                     (buy_market_orders[j], (currentSharePrice + sell_order.limitPrice)/2))
                 
@@ -790,6 +815,7 @@ def executeSellLimitOrders(stock, sell_limit_orders, buy_market_orders, buy_limi
                 
                 # Update in Shares_Owned
                 updateSharesOwnedForBuyOrder(buy_market_orders[j], (currentSharePrice + sell_order.limitPrice)/2)
+                updateUserBalance(buy_market_orders[j], (currentSharePrice + sell_order.limitPrice)/2)
 
                 # MAYBE
                 executed_orders_and_price.append(
@@ -807,6 +833,7 @@ def executeSellLimitOrders(stock, sell_limit_orders, buy_market_orders, buy_limi
 
         # Update in Shares_Owned
         updateSharesOwnedForSellOrder(sell_limit_orders[i])
+        updateUserBalance(sell_limit_orders[i], new_price)
 
         executed_orders_and_price.append(
             (sell_limit_orders[i], new_price))
@@ -821,7 +848,7 @@ def executeSellLimitOrders(stock, sell_limit_orders, buy_market_orders, buy_limi
         new_stock_history = StockPriceHistory(stock=stock, stockPrice=new_price, updatedAt=timezone.now())
         new_stock_history.save()
 
-        print("executed_orders_and_price: ", executed_orders_and_price)
+        # print("executed_orders_and_price: ", executed_orders_and_price)
         buy_market_orders = removeExecutedOrders(buy_market_orders)
 
     sell_limit_orders = removeExecutedOrders(sell_limit_orders)
@@ -844,11 +871,11 @@ def executeSellLimitOrders(stock, sell_limit_orders, buy_market_orders, buy_limi
         
         print("++++++++++++================= ")
         print("Stock: ", sell_order.stock.stockName)
-        print("User: ", sell_order.user.USERNAME_FIELD)
-        print("Sell Limit - Buy Limit")
+        # print("User: ", sell_order.user.USERNAME_FIELD)
+        # # print("Sell Limit - Buy Limit")
         print("wants_to_sell", wants_to_sell)
-        print("available_to_sell:", available_to_sell)
-        print("index:", index)
+        # print("available_to_sell:", available_to_sell)
+        # print("index:", index)
         # Now execute these orders till ith index, and if there are any partially completed orders
         # then let them remain in pending state. But for others we shall marks them as executed
         if index == -1:
@@ -873,6 +900,7 @@ def executeSellLimitOrders(stock, sell_limit_orders, buy_market_orders, buy_limi
 
                 # Update in Shares_Owned
                 updateSharesOwnedForBuyOrder(buy_limit_orders[j], (sell_order.limitPrice + buy_limit_orders[j].limitPrice)/2)
+                updateUserBalance(buy_limit_orders[j], (sell_order.limitPrice + buy_limit_orders[j].limitPrice)/2)
 
                 executed_orders_and_price.append(
                     (buy_limit_orders[j], (sell_order.limitPrice + buy_limit_orders[j].limitPrice)/2))
@@ -889,7 +917,7 @@ def executeSellLimitOrders(stock, sell_limit_orders, buy_market_orders, buy_limi
                 
                 # Update in Shares_Owned
                 updateSharesOwnedForBuyOrder(buy_limit_orders[j], (sell_order.limitPrice + buy_limit_orders[j].limitPrice)/2)
-
+                updateUserBalance(buy_limit_orders[j], (sell_order.limitPrice + buy_limit_orders[j].limitPrice)/2)
                 # MAYBE
                 executed_orders_and_price.append(
                     (buy_limit_orders[j], (sell_order.limitPrice + buy_limit_orders[j].limitPrice)/2))
@@ -906,13 +934,14 @@ def executeSellLimitOrders(stock, sell_limit_orders, buy_market_orders, buy_limi
 
         # Update in Shares_Owned
         updateSharesOwnedForSellOrder(sell_limit_orders[i])
+        updateUserBalance(sell_limit_orders[i], new_price)
 
         executed_orders_and_price.append(
             (sell_limit_orders[i], new_price))
         
         sell_limit_orders[i].quantityExecuted = sell_limit_orders[i].quantity
         
-        print("executed_orders_and_price: ", executed_orders_and_price)
+        # print("executed_orders_and_price: ", executed_orders_and_price)
         buy_limit_orders = removeExecutedOrders(buy_limit_orders)
 
         # Updating stock price
@@ -964,6 +993,7 @@ def mainExecutor():
     initializePendingOrderLists()
 
     while True:
+        bot_services.placeBotOrders()
         # Executing orders for each stock individually
         for stock in pendingOrders:
             updatedOrderLists = executeOrder(stock, pendingOrders[stock])
@@ -978,9 +1008,11 @@ def mainExecutor():
         print("######################################111111111")
         pprint(pendingOrders)
         print("######################################222222222")
-        '''
+        #'''
 
+        ''''
         all_stocks = Stock.objects.all()
         print("Stock time updates: ")
         for stock in all_stocks:
             print(stock.stockName, " - ", stock.lastTradedAt)
+        '''

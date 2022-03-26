@@ -15,8 +15,8 @@ User = get_user_model()
 class Trade(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     executionPrice = models.DecimalField(max_digits=16, decimal_places=3)
-    createdAt = models.DateField(auto_now_add=True)
-    updatedAt = models.DateField(auto_now=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
     # I need user field here to be able to filter out the trades for a particular user
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE,)

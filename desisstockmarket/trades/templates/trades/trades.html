@@ -9,6 +9,7 @@
             {% if trade.order.orderDirection == "SELL" %}
             <p><i> Profit: {{trade.profit}}% </i> </p>
             {% endif %}
+            <p>{{trade.createdAt}}</p>
             <hr>
         </div>
     {% endfor %}

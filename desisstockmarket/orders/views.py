@@ -46,7 +46,7 @@ def isValidTransaction(order):
     # TODO - DONE: Add condition for selling later
     # if order.orderDirection == OrderDirections.SELL:
     #     return True, ""
-    ''''
+    #''''
     if order.orderDirection == 'SELL':
         if Shares_Owned.objects.filter(user=order.user, stock=order.stock).exists():
             currently_owned = Shares_Owned.objects.filter(user=order.user, stock=order.stock)[0].quantity
@@ -54,7 +54,7 @@ def isValidTransaction(order):
                 return False, "Insufficient shares to sell! You cannot sell stocks that you don\'t own."
         else:
             return False, "Insufficient shares to sell! You cannot sell stocks that you don\'t own."
-    '''
+    #'''
 
     if order.orderDirection == 'BUY':
         share_price = order.limitPrice

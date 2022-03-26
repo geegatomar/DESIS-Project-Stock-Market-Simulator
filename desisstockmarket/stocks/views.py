@@ -9,7 +9,8 @@ from stocks.models import Stock
 
 
 def home(request):
-    stocks = Stock.objects.all()
+    #stocks = Stock.objects.all()
+    stocks = Stock.objects.order_by('-currentSharePrice', '-lastTradedAt')
     context = {'stocks': stocks}
     return render(request, 'stocks/home.html', context)
 
