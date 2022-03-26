@@ -69,6 +69,9 @@ def isValidTransaction(order):
     if order.limitPrice <= 0:
         return False, "Invalid Limit Price!"
     
+    if abs(order.limitPrice - order.stock.currentSharePrice) > 100:
+        return False, 'Limiting bid should be close to the market price of the stock!'
+    
     # You cannot buy more than the outstanding number of shares
     if order.quantity > order.stock.sharesOutstanding:
         return False, 'You cannot buy more than the outstanding number of shares'
