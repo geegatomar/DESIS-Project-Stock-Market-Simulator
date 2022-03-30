@@ -42,14 +42,19 @@
         <div>
             {% for order in orders %}
                 <div>
+                    {% comment %}
                     <a href="{% url 'orders:update-order' order.id %}"> Edit </a>
                     <a href="{% url 'orders:delete-order' order.id %}"> Delete </a>
+                    {% endcomment %}
                     <h3> {{ order }} </h3>
                     {% if order.orderStatus == 'OrderStatus.PENDING' %}
                     <p><i> Status: Pending </i> </p>
-                    {% else %}
+                    {% elif order.orderStatus == 'OrderStatus.EXECUTED' %}
                     <p><i> Status: Executed </i> </p>
+                    {% else %}
+                    <p><i> Status: Partially Executed </i> </p>
                     {% endif %}
+                    <p>{{order.updatedAt}}</p>
                 </div>
                 <hr>
             {% endfor %}

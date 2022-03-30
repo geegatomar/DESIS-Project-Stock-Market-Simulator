@@ -1,0 +1,48 @@
+- model: base.user
+  pk: 1
+  fields:
+    password: pbkdf2_sha256$320000$riN16mRrLqYhi6XyC2WhqT$340aPfWdYVqMPedWxSJciAIpokdBYcQ+k/kPSTSxg5A=
+    last_login: 2022-03-25 11:13:23.202912+00:00
+    is_superuser: false
+    username: bot_1
+    first_name: ''
+    last_name: ''
+    email: ''
+    is_staff: false
+    is_active: true
+    date_joined: 2022-03-25 11:13:22.328000+00:00
+    account_value: '100000.000'
+    groups: []
+    user_permissions: []
+- model: base.user
+  pk: 2
+  fields:
+    password: pbkdf2_sha256$320000$riN16mRrLqYhi6XyC2WhqT$340aPfWdYVqMPedWxSJciAIpokdBYcQ+k/kPSTSxg5A=
+    last_login: 2022-03-25 11:13:23.202912+00:00
+    is_superuser: false
+    username: bot_2
+    first_name: ''
+    last_name: ''
+    email: ''
+    is_staff: false
+    is_active: true
+    date_joined: 2022-03-25 11:13:22.328000+00:00
+    account_value: '100000.000'
+    groups: []
+    user_permissions: []
+- model: base.user
+  pk: 3
+  fields:
+    password: pbkdf2_sha256$320000$riN16mRrLqYhi6XyC2WhqT$340aPfWdYVqMPedWxSJciAIpokdBYcQ+k/kPSTSxg5A=
+    last_login: 2022-03-25 11:13:23.202912+00:00
+    is_superuser: false
+    username: bot_3
+    first_name: ''
+    last_name: ''
+    email: ''
+    is_staff: false
+    is_active: true
+    date_joined: 2022-03-25 11:13:22.328000+00:00
+    account_value: '100000.000'
+    groups: []
+    user_permissions: []

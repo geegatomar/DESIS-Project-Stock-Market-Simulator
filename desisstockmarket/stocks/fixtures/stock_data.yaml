@@ -6,7 +6,7 @@
     fullCompanyName: "Google Alphabet Inc."
     currentSharePrice: 2000.000
     sharesOutstanding: 1000
-    lastTradedAt: "2002-02-02"
+    lastTradedAt: "2022-03-24 14:54:47.771712+00:00"
 - model: stocks.Stock
   pk: 2
   fields:
@@ -15,7 +15,7 @@
     fullCompanyName: "Microsoft Corporation"
     currentSharePrice: 1000.000
     sharesOutstanding: 900
-    lastTradedAt: "2002-02-02"
+    lastTradedAt: "2022-03-24 14:54:47.771712+00:00"
 - model: stocks.Stock
   pk: 3
   fields:
@@ -24,7 +24,7 @@
     fullCompanyName: "Apple Inc."
     currentSharePrice: 900.000
     sharesOutstanding: 900
-    lastTradedAt: "2002-02-02"
+    lastTradedAt: "2022-03-24 14:54:47.771712+00:00"
 - model: stocks.Stock
   pk: 4
   fields:
@@ -33,7 +33,7 @@
     fullCompanyName: "Amazon Inc."
     currentSharePrice: 750
     sharesOutstanding: 900
-    lastTradedAt: "2002-02-02"
+    lastTradedAt: "2022-03-24 14:54:47.771712+00:00"
 - model: stocks.Stock
   pk: 5
   fields:
@@ -42,7 +42,7 @@
     fullCompanyName: "Tesla"
     currentSharePrice: 950
     sharesOutstanding: 900
-    lastTradedAt: "2002-02-02"
+    lastTradedAt: "2022-03-24 14:54:47.771712+00:00"
 - model: stocks.Stock
   pk: 6
   fields:
@@ -51,7 +51,7 @@
     fullCompanyName: "Nvidia Corporation"
     currentSharePrice: 500
     sharesOutstanding: 900
-    lastTradedAt: "2002-02-02"
+    lastTradedAt: "2022-03-24 14:54:47.771712+00:00"
 - model: stocks.Stock
   pk: 7
   fields:
@@ -60,7 +60,7 @@
     fullCompanyName: "J. P. Morgan Chase & Co."
     currentSharePrice: 650
     sharesOutstanding: 900
-    lastTradedAt: "2002-02-02"
+    lastTradedAt: "2022-03-24 14:54:47.771712+00:00"
 - model: stocks.Stock
   pk: 8
   fields:
@@ -69,4 +69,4 @@
     fullCompanyName: "Infosys Ltd."
     currentSharePrice: 300
     sharesOutstanding: 900
-    lastTradedAt: "2002-02-02"
+    lastTradedAt: "2022-03-24 14:54:47.771712+00:00"

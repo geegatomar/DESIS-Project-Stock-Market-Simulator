@@ -1,0 +1,161 @@
+- model: trades.shares_owned
+  pk: 1
+  fields:
+    user: 1
+    stock: '01'
+    quantity: 500
+    avg_cost_price: '2000.000'
+- model: trades.shares_owned
+  pk: 2
+  fields:
+    user: 2
+    stock: '01'
+    quantity: 500
+    avg_cost_price: '2000.000'
+- model: trades.shares_owned
+  pk: 3
+  fields:
+    user: 3
+    stock: '02'
+    quantity: 300
+    avg_cost_price: '1000.000'
+- model: trades.shares_owned
+  pk: 4
+  fields:
+    user: 1
+    stock: '02'
+    quantity: 300
+    avg_cost_price: '1000.000'
+- model: trades.shares_owned
+  pk: 5
+  fields:
+    user: 2
+    stock: '02'
+    quantity: 300
+    avg_cost_price: '1000.000'
+- model: trades.shares_owned
+  pk: 6
+  fields:
+    user: 3
+    stock: '03'
+    quantity: 300
+    avg_cost_price: '900.000'
+- model: trades.shares_owned
+  pk: 7
+  fields:
+    user: 1
+    stock: '03'
+    quantity: 300
+    avg_cost_price: '900.000'
+- model: trades.shares_owned
+  pk: 8
+  fields:
+    user: 2
+    stock: '03'
+    quantity: 300
+    avg_cost_price: '900.000'
+- model: trades.shares_owned
+  pk: 9
+  fields:
+    user: 3
+    stock: '04'
+    quantity: 300
+    avg_cost_price: '750.000'
+- model: trades.shares_owned
+  pk: 10
+  fields:
+    user: 1
+    stock: '04'
+    quantity: 300
+    avg_cost_price: '750.000'
+- model: trades.shares_owned
+  pk: 11
+  fields:
+    user: 2
+    stock: '04'
+    quantity: 300
+    avg_cost_price: '750.000'
+- model: trades.shares_owned
+  pk: 12
+  fields:
+    user: 3
+    stock: '05'
+    quantity: 300
+    avg_cost_price: '950.000'
+- model: trades.shares_owned
+  pk: 13
+  fields:
+    user: 1
+    stock: '05'
+    quantity: 300
+    avg_cost_price: '950.000'
+- model: trades.shares_owned
+  pk: 14
+  fields:
+    user: 2
+    stock: '05'
+    quantity: 300
+    avg_cost_price: '950.000'
+- model: trades.shares_owned
+  pk: 15
+  fields:
+    user: 3
+    stock: '06'
+    quantity: 300
+    avg_cost_price: '500.000'
+- model: trades.shares_owned
+  pk: 16
+  fields:
+    user: 1
+    stock: '06'
+    quantity: 300
+    avg_cost_price: '500.000'
+- model: trades.shares_owned
+  pk: 17
+  fields:
+    user: 2
+    stock: '06'
+    quantity: 300
+    avg_cost_price: '500.000'
+- model: trades.shares_owned
+  pk: 18
+  fields:
+    user: 3
+    stock: '07'
+    quantity: 300
+    avg_cost_price: '650.000'
+- model: trades.shares_owned
+  pk: 19
+  fields:
+    user: 1
+    stock: '07'
+    quantity: 300
+    avg_cost_price: '650.000'
+- model: trades.shares_owned
+  pk: 20
+  fields:
+    user: 2
+    stock: '07'
+    quantity: 300
+    avg_cost_price: '650.000'
+- model: trades.shares_owned
+  pk: 21
+  fields:
+    user: 3
+    stock: '08'
+    quantity: 300
+    avg_cost_price: '300.000'
+- model: trades.shares_owned
+  pk: 22
+  fields:
+    user: 1
+    stock: '08'
+    quantity: 300
+    avg_cost_price: '300.000'
+- model: trades.shares_owned
+  pk: 23
+  fields:
+    user: 2
+    stock: '08'
+    quantity: 300
+    avg_cost_price: '300.000'
