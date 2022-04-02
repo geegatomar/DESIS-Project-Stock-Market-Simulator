@@ -1,36 +1,69 @@
-{% extends 'main.html' %}
+<!DOCTYPE html>
 
-{% block content %}
+{% load static %}
 
-{% if page == 'login' %}
-<div>
-    <form method="POST" action="">
-        {% csrf_token %}
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Stock Market Project</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- CSS Files -->
+        <link rel="stylesheet" type='text/css' media='screen' href="{% static 'styles/login_register.css' %}">  
+	
+        <!-- JS Files -->
+        <script src = "{% static 'js/login_register.js' %}" ></script>
 
-        <label>Username:</label>
-        <input type="text" name="username" placeholder="Enter Username" />
+    </head>
+<body>
+	<div class="topnav">
+		<div>Stock Market Simulator</div>
+	</div>
 
-        <label>Password:</label>
-        <input type="password" name="password" placeholder="Enter Password" />
+<div class="container" id="container">
+	<div class="form-container sign-up-container">
+		<form method="POST" action="">
+			{% csrf_token %}
+			<h1>Create Account</h1>
+			
+			<input type="text" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus="" required="" id="id_username" placeholder="Enter Username">
+			<input type="password" name="password1" autocomplete="new-password" required="" id="id_password1" placeholder="Enter Password">
+			<input type="password" name="password2" autocomplete="new-password" required="" id="id_password2" placeholder="Re-Enter Password">
+			<button name="submit" type="submit" value="register">Register</button>
+		</form>
+	</div>
+	<div class="form-container sign-in-container">
+        <!-- Login -->
+        <form method="POST" action="">   
+            {% csrf_token %}
+			<h1>Sign in</h1>
 
-        <input type="submit" value="Login"/>
-    </form>
-    <p> Haven't signed up yet? </p>
-    <a href="{% url 'base:register' %}"> Sign Up! </a>
+			<input type="text" name = "username" placeholder="Enter Username" />
+			<input type="password" name = "password" placeholder="Enter Password" />
+			<button name="submit" type="submit" value="login">Login</button>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>Welcome Back!</h1>
+				<p>To keep connected with us please login with your personal info</p>
+				<button class="ghost" id="signIn">Sign In</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>Hello, Friend!</h1>
+				<p>Enter your personal details and start journey with us</p>
+				<button class="ghost" id="signUp">Sign Up</button>
+			</div>
+		</div>
+	</div>
 </div>
 
-{% else %}
 
-<div>
-    <form method="POST" action="">
-        {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="Register"/>
-    </form>
-    <p> Already signed up? </p>
-    <a href="{% url 'base:login' %}"> Sign In! </a>
-</div>
-
-{% endif %}
-
-{% endblock %}
+</body>
+</html>
