@@ -1,8 +1,6 @@
 from django.db import models
 from enum import Enum
 from stocks.models import Stock
-#from base.models import User
-#from desisstockmarket import settings
 from django.conf import settings
 from orders.models import Order
 
@@ -10,7 +8,6 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 # An order transitions to a trade state once it gets executed
-
 
 class Trade(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
