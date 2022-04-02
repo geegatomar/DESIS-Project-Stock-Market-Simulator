@@ -1,7 +1,9 @@
 from inspect import ClassFoundException
 from django.test import TestCase
-
-from models import Stock, StockPriceHistory
+from stocks.models import *
+from orders.models import *
+from trades.models import *
+from base.models import *
 
 
 class StockModelsTestCase(TestCase):
@@ -14,7 +16,7 @@ class StockModelsTestCase(TestCase):
                              lastTradedAt='2006-10-25 14:30:59')
 
     def test_string_method(self):
-        stocks = Stock.objects.get(id=1)
+        stocks = Stock.objects.get(stockId=1)
         expected_string = str(self.stockName)
         self.assertEqual(str(stocks), expected_string)
 

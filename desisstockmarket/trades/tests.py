@@ -1,11 +1,11 @@
 from unittest import expectedFailure
 from django.test import TestCase
 from numpy import quantile
-
-from models import *
-from django.contrib.auth import get_user_model
+from stocks.models import *
 from orders.models import *
-from stocks.models import Stock
+from trades.models import *
+from base.models import *
+from django.contrib.auth import get_user_model
 from django.conf import settings
 
 
