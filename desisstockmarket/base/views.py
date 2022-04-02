@@ -1,11 +1,12 @@
+<<<<<<< HEAD
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-#from base.models import User
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm
-# Create your views here.
+
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -51,7 +52,7 @@ def registerUser(request):
     form = UserCreationForm()
 
     if request.method == 'POST':
-        #form = UserCreationForm(request.POST)
+        
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
@@ -63,11 +64,6 @@ def registerUser(request):
     context = {'page': page, 'form': form}
     return render(request, 'base/login_register.html', context)
 
-# We mostly don't need this
-# def userProfile(request, pk):
-#     user = User.objects.get(id=pk)
-#     context = {'user': user}
-#     return render(request, 'base/profile.html', context)
 
 
 def home(request):

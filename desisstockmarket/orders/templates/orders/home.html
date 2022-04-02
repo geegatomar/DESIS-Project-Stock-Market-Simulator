@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 
 {% load static %}
@@ -89,3 +90,73 @@
 
 </body>
 </html>
+=======
+{% extends 'main.html' %}
+
+
+{% block content %}
+<style>
+    .home-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+    }
+</style>
+
+<h1> Orders Page </h1>
+
+<div class="home-container">
+    <div>
+        <h3>Explore Stocks</h3>
+
+        <div>
+            <hr>
+            <form method="GET" action="{% url 'orders:home' %}">
+                <input type="text" name="q" placeholder="Filter Order By Stock Name..."/>
+            </form>
+            <hr>
+        </div>
+        
+        <div>
+            <a href="{% url 'orders:home' %}">All</a>
+        </div>
+        {% for stock in stocks %}
+        <div>
+            <a href="{% url 'orders:home' %}?q={{stock.stockName}}">{{stock.stockName}}</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div>
+        <a href="{% url 'orders:create-order' %}"> Create New Order</a>
+        <h3> List of outstanding orders: </h3>
+        <hr>
+        <p> Orders present: {{orders_count}}</p>
+        <hr>
+        <div>
+            {% for order in orders %}
+                <div>
+                    {% comment %}
+                    <a href="{% url 'orders:update-order' order.id %}"> Edit </a>
+                    <a href="{% url 'orders:delete-order' order.id %}"> Delete </a>
+                    {% endcomment %}
+                    <h3> {{ order }} </h3>
+                    {% if order.orderStatus == 'OrderStatus.PENDING' %}
+                    <p><i> Status: Pending </i> </p>
+                    {% elif order.orderStatus == 'OrderStatus.EXECUTED' %}
+                    <p><i> Status: Executed </i> </p>
+                    {% else %}
+                    <p><i> Status: Partially Executed </i> </p>
+                    {% endif %}
+                    <p>{{order.updatedAt}}</p>
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+
+
+{% endblock %}
+>>>>>>> origin

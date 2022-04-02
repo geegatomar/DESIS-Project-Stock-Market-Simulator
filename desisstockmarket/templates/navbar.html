@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% comment %} <h1> Stock Market Simulator Name Here (TODO) </h1>
 
 {% if request.user.is_authenticated %}
@@ -76,3 +77,39 @@
 
     </div>
 </section>
+=======
+<h1> Stock Market Simulator Name Here (TODO) </h1>
+
+{% if request.user.is_authenticated %}
+<span style="display:inline-block; width: 8%;">
+    <a href="{% url 'base:logout' %}"> Logout </a>
+</span>
+
+<span style="display:inline-block; width: 8%;">
+    <a href="{% url 'orders:home' %}"> Orders </a>
+</span>
+
+<span style="display:inline-block; width: 8%;">
+    <a href="{% url 'trades:view-trades' %}"> Trades </a>
+</span>
+
+<span style="display:inline-block; width: 8%;">
+    <a href="{% url 'trades:view-shares' %}"> Portfolio </a>
+</span>
+
+
+{% else %}
+<span style="display:inline-block; width: 8%;">
+    <a href="{% url 'base:login' %}"> Login </a>
+</span>
+
+{% endif %}
+
+<span style="display:inline-block; width: 8%;">
+    <a href="{% url 'stocks:home' %}"> Stocks </a>
+</span>
+
+{% if request.user.is_authenticated %}
+<span> Account Value: {{ request.user.account_value }} </span>
+{% endif %}
+>>>>>>> origin

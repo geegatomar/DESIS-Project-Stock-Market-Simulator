@@ -4,7 +4,9 @@ install:
     pip3 install -r requirements.txt
 
 run:
+    python3 manage.py loaddata bots_data
 	python3 manage.py loaddata stock_data
+    python3 manage.py loaddata bot_shares_data
     python3 manage.py runserver
 
 migration:
