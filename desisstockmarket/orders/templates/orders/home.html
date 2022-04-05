@@ -28,11 +28,17 @@
 <body>
 
     <div class="topnav">
-		<div>Stock Market Simulator</div>
+		<div>Stock Market Project</div>
         <ul>
             <li><a href="{% url 'base:home' %}">Home</a></li>
             <li><a href="{% url 'stocks:home' %}">Stocks</a></li>
+            <li><a href="{% url 'orders:home' %}">Orders</a></li>
+            <li><a href="{% url 'trades:view-trades' %}">Trades</a></li>
+            <li><a href="{% url 'trades:view-shares' %}">Portfolio</a></li>
             <li style="float:right"><a href="{% url 'base:logout' %}">Logout</a></li>
+            {% if request.user.is_authenticated %}
+            <li style="float:right"> Account Value: {{ request.user.account_value }} </li>
+            {% endif %}
         </ul>
 	</div>
 
