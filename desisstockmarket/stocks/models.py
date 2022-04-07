@@ -1,9 +1,5 @@
 from django.db import models
 
-
-# Create your models here.
-
-
 class Stock(models.Model):
     stockId = models.CharField(max_length=16, primary_key=True)
     stockName = models.CharField(max_length=128, unique=True)
