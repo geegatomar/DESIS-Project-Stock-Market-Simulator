@@ -1,4 +1,4 @@
-<h1> Stock Market Simulator Name Here (TODO) </h1>
+{% comment %} <h1> Stock Market Simulator Name Here (TODO) </h1>
 
 {% if request.user.is_authenticated %}
 <span style="display:inline-block; width: 8%;">
@@ -31,4 +31,50 @@
 
 {% if request.user.is_authenticated %}
 <span> Account Value: {{ request.user.account_value }} </span>
-{% endif %}
+{% endif %} {% endcomment %}
+
+<!-- MENU -->
+<section class="navbar custom-navbar navbar-fixed-top" role="navigation">
+    <div class="container">
+         <div class="navbar-header">
+              <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                   <span class="icon icon-bar"></span>
+                   <span class="icon icon-bar"></span>
+                   <span class="icon icon-bar"></span>
+              </button>
+
+              <!-- lOGO TEXT HERE -->
+              <a href="index.html" class="navbar-brand">Stock Market Project</a>
+         </div>
+
+         <!-- MENU LINKS -->
+         <div class="collapse navbar-collapse">
+              {% if request.user.is_authenticated %}
+              <ul class="nav navbar-nav navbar-nav-first">
+                <li><a href="#home" class="smoothScroll">Home</a></li>
+                <li><a href="#about" class="smoothScroll">About</a></li>
+                <li><a href="{% url 'stocks:home' %}" class="smoothScroll">Stocks</a></li>
+                <li><a href="#work" class="smoothScroll">Our Work</a></li>
+                <li><a href="{% url 'orders:home' %}" class="smoothScroll">Orders</a></li>
+                <li><a href="{% url 'trades:view-trades' %}" class="smoothScroll">Trades</a></li>
+                <li><a href="{% url 'trades:view-shares' %}" class="smoothScroll">Portfolio</a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                   <li class="section-btn"><a href="{% url 'base:logout' %}" data-toggle="modal" data-target="#modal-form">Logout</a></li>
+              </ul>
+              {% else %}
+              <ul class="nav navbar-nav navbar-nav-first">
+                <li><a href="#home" class="smoothScroll">Home</a></li>
+                <li><a href="#about" class="smoothScroll">About</a></li>
+                <li><a href="#work" class="smoothScroll">Our Work</a></li>
+                <li><a href="{% url 'stocks:home' %}" class="smoothScroll">Stocks</a></li>
+                </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li class="section-btn"><a href="{% url 'base:login' %}" data-toggle="modal" data-target="#modal-form">Sign in / Join</a></li>
+              </ul>
+              {% endif %}
+
+         </div>
+
+    </div>
+</section>

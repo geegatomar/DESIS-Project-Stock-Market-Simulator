@@ -1,8 +1,77 @@
-{% extends 'main.html' %}
+<!DOCTYPE html>
 
-{% block content %}
-<h1> Stocks Page </h1>
-<div>
+{% load static %}
+
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Stock Market Project</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type='text/css' media='screen' href="{% static 'styles/navbar_new.css' %}">  
+        <link rel="stylesheet" type='text/css' media='screen' href="{% static 'styles/bootstrap.min.css' %}">
+        <link rel="stylesheet" type='text/css' media='screen' href="{% static 'styles/magnific-popup.css' %}">
+        <link rel="stylesheet" type='text/css' media='screen' href="{% static 'styles/font-awesome.min.css' %}">
+
+    </head>
+<body>
+
+    <div class="topnav">
+		<div>Stock Market Project</div>
+        <ul>
+            <li><a href="{% url 'base:home' %}">Home</a></li>
+            <li><a href="{% url 'stocks:home' %}">Stocks</a></li>
+            <li><a href="{% url 'orders:home' %}">Orders</a></li>
+            <li><a href="{% url 'trades:view-trades' %}">Trades</a></li>
+            <li><a href="{% url 'trades:view-shares' %}">Portfolio</a></li>
+            <li style="float:right"><a href="{% url 'base:logout' %}">Logout</a></li>
+            {% if request.user.is_authenticated %}
+            <li style="float:right"> Account Value: {{ request.user.account_value }} </li>
+            {% endif %}
+        </ul>
+	</div>
+
+<section id="work" data-stellar-background-ratio="0.5">
+    <div class="container">
+        <div class="row">
+              <div class="col-md-12 col-sm-12">
+                   <div class="section-title">
+                        <h1><b>STOCKS</b></h1>
+                        <span class="line-bar">...</span>
+                   </div>
+              </div>
+              {% for stock in stocks %}
+                <div class="col-md-3 col-sm-6">
+                    <!-- WORK THUMB -->
+                    <div class="work-thumb">
+                        <a href="#" class="image-popup">
+                            <img src="{% static 'img/work-image1.jpg' %}" class="img-responsive" alt="Work">
+                            <div class="work-info" style="font-size:20px;">
+                                <h3><a href='{% url 'stocks:info' stock.stockId %}'>{{stock.stockName}}</a></h3>
+                                <b>Price: {{stock.currentSharePrice}}</b>
+                                <br>
+                                <b>Shares Outstanding: {{stock.sharesOutstanding}}</b>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <br>
+                <br>
+              {% endfor %}
+        </div>
+    </div>
+</section>
+<br>
+<br>
+<br>
+
+
+{% comment %} <div>
     {% for stock in stocks %}
         <div>
             <h3> {{stock.stockId}} --- <a href='{% url 'stocks:info' stock.stockId %}'>{{stock.stockName}}</a> -- Price: {{stock.currentSharePrice}} -- Shares Outstanding: {{stock.sharesOutstanding}} </h3>
@@ -14,6 +83,7 @@
             <hr>
         </div>
     {% endfor %}
-</div>
+</div> {% endcomment %}
+</body>
+</html>
 
-{% endblock %}

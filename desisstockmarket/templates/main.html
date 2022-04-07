@@ -5,7 +5,7 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!<![endif]-->
 <html>
     <head>
         <meta charset="utf-8">
@@ -13,11 +13,24 @@
         <title>Stock Market Project</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!-- CSS Files -->
         <link rel="stylesheet" type='text/css' media='screen' href="{% static 'styles/main.css' %}">
+        {% comment %} <link rel="stylesheet" type='text/css' media='screen' href="{% static 'styles/login_register.css' %}">   {% endcomment %}
+        <link rel="stylesheet" type='text/css' media='screen' href="{% static 'styles/bootstrap.min.css' %}">
+        <link rel="stylesheet" type='text/css' media='screen' href="{% static 'styles/magnific-popup.css' %}">
+        <link rel="stylesheet" type='text/css' media='screen' href="{% static 'styles/font-awesome.min.css' %}">
+
+     <!-- MAIN CSS -->
+     <link rel="stylesheet" href="{% static 'styles/templatemo-style.css' %}">
+
+        <!-- JS Files -->
+        <script src = "{% static 'js/login_register.js' %}" ></script>
+
     </head>
     <body>
 
-        {% include 'navbar.html' %}
+        {% include 'navbar.html' %} 
 
         {% if messages %}
         <ul class="messages">
@@ -32,4 +45,11 @@
         {% endblock %}
 
     </body>
+    <!-- SCRIPTS -->
+    <script src="{js/jquery.js}"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.stellar.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/smoothscroll.js"></script>
+    <script src="js/custom.js"></script>
 </html>

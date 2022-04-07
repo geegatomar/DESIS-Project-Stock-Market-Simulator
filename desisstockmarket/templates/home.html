@@ -1,14 +1,243 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<h1> Home Page content here </h1>
-<h3> TODO: Replace all this with the content of our website and about its features </h3>
 
-<p>
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-</p>
+{% load static%}
+
+<!-- HOME -->
+<section id="home" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+         <div class="row">
+              <div class="col-md-6 col-sm-12">
+                   <div class="home-info">
+                        <h1><b>Trade Stocks. Make Money. Earn Bragging Rights.</b></h1>
+                        <h3 style="color:rgb(251, 251, 255)">Build your portfolio and react to the markets. Compete against your friends or coworkers to earn your spot at the top of the leaderboards.</h3>
+                   </div>
+              </div>         
+         </div>
+    </div>
+</section>
+
+
+<!-- ABOUT -->
+<section id="about" data-stellar-background-ratio="0.5">
+    <div class="container">
+         <div class="row">
+              <div class="col-md-5 col-sm-6">
+                   <div class="about-info">
+                        <div class="section-title">
+                             <h2>Let us introduce</h2>
+                             <span class="line-bar">...</span>
+                        </div>
+                        <p>We make learning about the stock market easy, fun, rewarding, and profitable.</p>
+                        <p>Trading is immensely exciting, but often very tricky to get your head around as a beginner. Here, you can discover what each stage involves and learn what the unfamiliar terms and concepts mean, equipping you to place real trades with confidence.</p>
+                        <p>Test out your strategies without risking any money via a practice account</p>
+                   </div>
+              </div>                    
+         </div>
+    </div>
+</section>
+
+<!-- WORK -->
+<section id="work" data-stellar-background-ratio="0.5">
+    <div class="container">
+         <div class="row">
+
+              <div class="col-md-12 col-sm-12">
+                   <div class="section-title">
+                        <h2>Our work</h2>
+                        <span class="line-bar">...</span>
+                   </div>
+              </div>
+              
+              <div class="col-md-3 col-sm-6">
+                   <!-- WORK THUMB -->
+                   <div class="work-thumb">
+                         <img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/stock-market-graph-2031573-1715827.png " class="img-responsive" alt="Work">
+                         <p><b>Practice stock trading with virtual money.</b></p>
+                         <p>No deposit needed. Practice trading with virtual money to sharpen your knowledge of how the stock market works and how to use an online brokerage. This Simulator will help you gain confidence before risking your own money</p>
+                   </div>
+              </div>
+
+              <div class="col-md-1 col-sm-6">
+                   
+               </div>
+
+              <div class="col-md-3 col-sm-6">
+                   <!-- WORK THUMB -->
+                   <div class="work-thumb">
+                        <img src="https://icon-library.com/images/icon-chart/icon-chart-17.jpg" class="img-responsive" alt="Work">
+                         <p><b>Trade a wide range of stocks, ETFs, and options.</b></p>
+                         <p>Whether you are investing for the first time or looking to get more familiar with more advanced trading methods, there is something for you.</p>
+                   </div>
+              </div>
+
+              <div class="col-md-1 col-sm-6">
+                   
+               </div>
+
+              <div class="col-md-3 col-sm-6">
+                   <!-- WORK THUMB -->
+                   <div class="work-thumb">
+                         <img src="https://www.freeiconspng.com/thumbs/stock-exchange-icon-png/money-stock-exchange-icon-png-13.png" class="img-responsive" alt="Work">
+                         <p><b>Trade by yourself or compete with others.</b></p>
+                         <p>Practice trading and investing by yourself and other like-minded educated investors.</p>
+                   </div>
+              </div>
+         </div>
+    </div>
+</section>
+
+<!-- FOOTER
+<footer data-stellar-background-ratio="0.5">
+    <div class="container">
+         <div class="row">
+
+              <div class="col-md-5 col-sm-12">
+                   <div class="footer-thumb footer-info"> 
+                        <h2>Hydro Company</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                   </div>
+              </div>
+
+              <div class="col-md-2 col-sm-4"> 
+                   <div class="footer-thumb"> 
+                        <h2>Company</h2>
+                        <ul class="footer-link">
+                             <li><a href="#">About Us</a></li>
+                             <li><a href="#">Join our team</a></li>
+                             <li><a href="#">Read Blog</a></li>
+                             <li><a href="#">Press</a></li>
+                        </ul>
+                   </div>
+              </div>
+
+              <div class="col-md-2 col-sm-4"> 
+                   <div class="footer-thumb"> 
+                        <h2>Services</h2>
+                        <ul class="footer-link">
+                             <li><a href="#">Pricing</a></li>
+                             <li><a href="#">Documentation</a></li>
+                             <li><a href="#">Support</a></li>
+                        </ul>
+                   </div>
+              </div>
+
+              <div class="col-md-3 col-sm-4"> 
+                   <div class="footer-thumb"> 
+                        <h2>Find us</h2>
+                        <p>123 Grand Rama IX, <br> Krung Thep Maha Nakhon 10400</p>
+                   </div>
+              </div>                    
+
+              <div class="col-md-12 col-sm-12">
+                   <div class="footer-bottom">
+                        <div class="col-md-6 col-sm-5">
+                             <div class="copyright-text"> 
+                                  <p>Copyright &copy; 2017 Your Company</p>
+                             </div>
+                        </div>
+                        
+                   </div>
+              </div>
+              
+         </div>
+    </div>
+</footer> -->
+
+{% comment %} <section id="work" data-stellar-background-ratio="0.5" style="background-color:black;">
+     <div class="container">
+          <div class="row" style="color:white;">
+ 
+               <div class="col-md-12 col-sm-12">
+                    <div class="section-title" style="text-align:center;">
+                         <h2 style="color:white;">Our Team</h2>
+                         <span class="line-bar">...</span>
+                    </div>
+               </div>
+               <div class="column">
+                    <div class="col-md-3 col-sm-6">
+                         <!-- WORK THUMB -->
+                         <div class="work-thumb">
+                              <img style="border-radius:50%;" src="{% static 'img/Anshika.jpg' %}" class="img-responsive" alt="Work">
+                              <p style="color:white;"><b>Anshika Yadav</b></p> 
+                         </div>
+                    </div>
+     
+                    <div class="col-md-3 col-sm-6">
+                         <!-- WORK THUMB -->
+                         <div class="work-thumb">
+                              <img src="" style="border-radius:50%;" class="img-responsive" alt="Work">
+                              <p style="color:white;"><b>Jyotsana Srivastava</b></p> 
+                         </div>
+                    </div>
+     
+                    <div class="col-md-3 col-sm-6">
+                         <!-- WORK THUMB -->
+                         <div class="work-thumb">
+                              <img style="border-radius:50%;" src="{% static 'img/Mansi.jpg' %}" class="img-responsive" alt="Work">
+                              <p style="color:white;"><b>Mansi Aggarwal</b></p> 
+                         </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                         <!-- WORK THUMB -->
+                         <div class="work-thumb">
+                              <img style="border-radius:50%;" src="{% static 'img/Radhika.jpg' %}" class="img-responsive" alt="Work">
+                              <p style="color:white;"><b>Radhika Gupta</b></p> 
+                         </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                         <!-- WORK THUMB -->
+                         <div class="work-thumb">
+                              <img style="border-radius:50%;" src="{% static 'img/Shivangi.jpeg' %}" class="img-responsive" alt="Work">
+                              <p style="color:white;"><b>Shivangi Joshi</b></p> 
+                         </div>
+                    </div>
+               </div>
+          </div>
+     </div>
+</section> {% endcomment %}
+
+<div class="section-title" style="text-align:center;">
+     <h2 style="color:black;">Our Team</h2>
+     <span class="line-bar">...</span>
+</div>
+
+<div class="row">
+     <div class="column">
+       <img src="{% static 'img/Anshika.jpg' %}" alt="Snow" style="width:100%;border-radius:50%;">
+       <p style="color:black;text-align:center"><b>Anshika Yadav</b></p>
+     </div>
+     <div class="column">
+       <img src="{% static 'img/Mansi.jpg' %}" alt="Forest" style="width:100%;border-radius:50%;">
+       <p style="color:black;text-align:center"><b>Mansi Aggarwal</b></p>
+     </div>
+     <div class="column">
+       <img src="{% static 'img/Radhika.jpg' %}" alt="Mountains" style="width:100%;border-radius:50%;">
+       <p style="color:black;text-align:center"><b>Radhika Gupta</b></p>
+     </div>
+     <div class="column">
+          <img src="{% static 'img/Jyotsana.jpeg' %}" alt="Jyotsana" style="width:100%;border-radius:50%;">
+          <p style="color:black;text-align:center"><b>Jyotsana Srivastava</b></p>
+     </div>
+        <div class="column">
+          <img src="{% static 'img/Shivangi.jpeg' %}" alt="Mountains" style="width:100%;border-radius:50%;">
+          <p style="color:black;text-align:center"><b>Shivangi Joshi</b></p>
+     </div>
+   </div>
+
+
+
+<!-- SCRIPTS -->
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.stellar.min.js"></script>
+<script src="js/jquery.magnific-popup.min.js"></script>
+<script src="js/smoothscroll.js"></script>
+<script src="js/custom.js"></script>
+
 
 {% endblock %}
