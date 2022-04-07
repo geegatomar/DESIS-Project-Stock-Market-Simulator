@@ -4,11 +4,16 @@
 
 1. Fork the project, and clone locally
 2. Use a virtual environment, and then install all dependencies using 'requirements.txt' file provided.
-3. To initialize all fixtures, find the command in the Makefile. Make sure you populate the db with fixtures before running the app.
-4. Check the Makefile for common commands, and you can directly execute them also.
-5. Also make sure to do the 'makemigrations' and 'migrate' in django.
+3. Create the database by doing the 'migrate' in django:
+                python3 manage.py migrate
+4. Make sure you populate the db with fixtures before running the app. To initialize all fixtures, run the following commands:
+                python3 manage.py loaddata bots_data
+	              python3 manage.py loaddata stock_data
+                python3 manage.py loaddata bot_shares_data
+5. Finally, run the project using the following command:
+                python3 manage.py runserver
+6. Check the Makefile for common commands, and you can directly execute them also.
 
-- TODO: Add more to this
 
 ### Project Explanation
 - TODO: Add explanation
