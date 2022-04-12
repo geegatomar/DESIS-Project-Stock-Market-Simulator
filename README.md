@@ -1,5 +1,7 @@
 # DESIS Ascend Educare: Stock Market Project
 
+[Project Report](https://docs.google.com/document/d/1RiM_tJUNKYW4TEI1FXe0eJpksxBhiu2sgpSmr4f03NQ/edit?usp=sharing)
+
 ### Steps to run locally
 
 1. Fork the project, and clone locally
@@ -13,15 +15,6 @@
 9. Finally, run the project using the following command:
 10. 		python3 manage.py runserver
 11. Check the Makefile for common commands, and you can directly execute them also.
-
-
-### Project Explanation
-- TODO: Add explanation
-- TODO: Add database diagrams, and all other workflow diagrams here
-- TODO: Explain all the functionalities, and additional functionalities such as the rate limiter we added
-- TODO: Explain our main order matching algorithm, and why we took 4 queues
-
-- TODO: Also add a future work and caveats section
 
 
 ### Team
