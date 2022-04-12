@@ -1,6 +1,7 @@
 # DESIS Ascend Educare: Stock Market Project
 
 [Project Report](https://docs.google.com/document/d/1RiM_tJUNKYW4TEI1FXe0eJpksxBhiu2sgpSmr4f03NQ/edit?usp=sharing)
+[Project Demo Video](https://youtu.be/X3SIhQ3icNU)
 
 ### Steps to run locally
 
