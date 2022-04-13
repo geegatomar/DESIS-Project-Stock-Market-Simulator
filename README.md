@@ -4,6 +4,8 @@
 
 [Project Demo Video](https://youtu.be/X3SIhQ3icNU)
 
+[Project Presentation Slides](https://docs.google.com/presentation/d/1ziCVbeReiT73pluI3BlUoNjdSgBAF_L7ZKQkIHx28Kk/edit?usp=sharing)
+
 ### Steps to run locally
 
 1. Fork the project, and clone locally
